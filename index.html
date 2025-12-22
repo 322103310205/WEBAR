@@ -12,6 +12,12 @@
 
   <style>
     body { margin: 0; overflow: hidden; }
+    video {
+    object-fit: cover !important;
+    width: 100% !important;
+    height: 100% !important;
+}
+
   </style>
 </head>
 
@@ -22,12 +28,8 @@
   vr-mode-ui="enabled: false"
   arjs="
     sourceType: webcam;
-    sourceWidth: 640;
-    sourceHeight: 480;
-    displayWidth: 640;
-    displayHeight: 480;
-    debugUIEnabled: false;
     facingMode: environment;
+    debugUIEnabled: false;
   "
 >
 
@@ -39,9 +41,10 @@
             color="white"></a-text>
   </a-marker>
 
-  <a-entity camera="fov: 60"></a-entity>
+  <a-entity camera></a-entity>
 </a-scene>
 
 </body>
 </html>
+
 
