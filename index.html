@@ -1,39 +1,56 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <title>Web AR Navigation</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Camera Test</title>
+
+  <!-- A-Frame -->
+  <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+
+  <!-- AR.js -->
+  <script src="https://cdn.jsdelivr.net/npm/ar.js@3.4.5/aframe/build/aframe-ar.js"></script>
+
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden;
+      background: black;
+    }
+  </style>
 </head>
-<body style="margin:0; background:black;">
 
-<button id="start" style="
-  position:fixed;
-  top:40%;
-  left:50%;
-  transform:translate(-50%,-50%);
-  padding:14px 20px;
-  font-size:16px;
-">
-  Start Camera
-</button>
+<body>
 
-<script>
-document.getElementById("start").onclick = async () => {
-  try {
-    const stream = await navigator.mediaDevices.getUserMedia({
-      video: { facingMode: "environment" }
-    });
-    const video = document.createElement("video");
-    video.srcObject = stream;
-    video.autoplay = true;
-    video.playsInline = true;
-    document.body.appendChild(video);
-    document.getElementById("start").remove();
-  } catch (e) {
-    alert("Camera failed");
-  }
-};
-</script>
+<a-scene
+  embedded
+  vr-mode-ui="enabled: false"
+  renderer="logarithmicDepthBuffer: true;"
+  arjs="sourceType: webcam; facingMode: environment; debugUIEnabled: false;"
+>
+
+  <!-- HIRO Marker -->
+  <a-marker preset="hiro">
+    <a-box
+      position="0 0.5 0"
+      rotation="0 45 0"
+      color="red"
+      depth="0.5"
+      height="0.5"
+      width="0.5">
+    </a-box>
+
+    <a-text
+      value="Marker detected"
+      position="0 1.2 0"
+      align="center"
+      color="white">
+    </a-text>
+  </a-marker>
+
+  <!-- Camera -->
+  <a-entity camera></a-entity>
+
+</a-scene>
 
 </body>
 </html>
