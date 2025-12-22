@@ -2,6 +2,7 @@
 <html>
 <head>
   <title>Web AR Navigation</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 
   <!-- A-Frame -->
   <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
@@ -14,10 +15,27 @@
       margin: 0;
       overflow: hidden;
     }
-  </style>
+    /* Start AR button */
+    #startAR {
+      position: absolute;
+      left: 50%;
+      top: 10%;
+      transform: translateX(-50%);
+      z-index: 9999;
+      padding: 12px 18px;
+      font-size: 16px;
+      border-radius: 8px;
+      border: none;
+      background: rgba(0, 123, 255, 0.95);
+      color: white;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+    }
+  </style> 
 </head>
 
 <body>
+  <button id="startAR">Start AR — Allow camera</button>
+
   <a-scene
     embedded
     vr-mode-ui="enabled: false"
@@ -51,7 +69,45 @@
     <a-entity camera></a-entity>
 
   </a-scene>
+
+  <script>
+    (function () {
+      const startBtn = document.getElementById('startAR');
+      if (!startBtn) return;
+      startBtn.addEventListener('click', async function () {
+        const btn = this;
+        btn.disabled = true;
+        try {
+          // Trigger permission prompt and prefer rear camera on mobile
+          const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: { ideal: 'environment' } } });
+
+          // If AR.js or the browser created a video element, set playsinline to avoid fullscreen on iOS
+          const videos = document.getElementsByTagName('video');
+          for (const v of videos) {
+            v.setAttribute('playsinline', '');
+            v.setAttribute('muted', '');
+            v.setAttribute('autoplay', '');
+          }
+
+          // Hide start button on success
+          btn.style.display = 'none';
+
+          // Optionally stop the temporary stream tracks if AR.js will open its own stream
+          try {
+            if (stream && stream.getTracks) {
+              stream.getTracks().forEach(t => t.stop());
+            }
+          } catch (e) {
+            // ignore
+          }
+        } catch (err) {
+          console.error('Camera access denied or error:', err);
+          alert('Camera access is required for AR. Please allow camera permission in your browser settings.');
+          btn.disabled = false;
+        }
+      });
+    })();
+  </script>
 </body>
 </html>
-
 
