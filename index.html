@@ -37,16 +37,20 @@
 </head>
 
 <body>
-  <a-scene
-    embedded
-    renderer="precision: mediump; antialias: true;"
-    arjs="
-      sourceType: webcam;
-      facingMode: environment;
-      displayWidth: window.innerWidth;
-      displayHeight: window.innerHeight;
-    "
-  >
+ <a-scene
+  embedded
+  vr-mode-ui="enabled: false"
+  xr-mode-ui="enabled: false"
+  device-orientation-permission-ui="enabled: false"
+  renderer="precision: mediump; antialias: true;"
+  arjs="
+    sourceType: webcam;
+    facingMode: environment;
+    displayWidth: window.innerWidth;
+    displayHeight: window.innerHeight;
+  "
+>
+
 
     <a-marker preset="hiro">
 
@@ -79,4 +83,5 @@
   </a-scene>
 </body>
 </html>
+
 
