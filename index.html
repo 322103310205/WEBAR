@@ -44,7 +44,28 @@
   arjs="sourceType: webcam; debugUIEnabled:false;"
 >
   <a-marker preset="hiro">
-    <a-box position="0 0.5 0" color="red"></a-box>
+    <!-- Arrow Wrapper -->
+<a-entity id="navArrow" position="0 0 0">
+
+  <!-- Shaft -->
+  <a-cylinder
+    position="0 0.35 0"
+    radius="0.05"
+    height="0.5"
+    color="#00ff00">
+  </a-cylinder>
+
+  <!-- Head -->
+  <a-cone
+    position="0 0.7 0"
+    radius-bottom="0.15"
+    radius-top="0"
+    height="0.25"
+    color="#00ff00">
+  </a-cone>
+
+</a-entity>
+
   </a-marker>
 
   <a-entity camera></a-entity>
@@ -59,3 +80,4 @@ document.getElementById('startAR').addEventListener('click', () => {
 
 </body>
 </html>
+
