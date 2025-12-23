@@ -9,22 +9,6 @@
 
   <!-- AR.js -->
   <script src="https://cdn.jsdelivr.net/gh/AR-js-org/AR.js/aframe/build/aframe-ar.js"></script>
-  <script>
-document.getElementById("startAR").addEventListener("click", async () => {
-  try {
-    await navigator.mediaDevices.getUserMedia({
-      video: { facingMode: { ideal: "environment" } }
-    });
-
-    document.getElementById("startAR").style.display = "none";
-    document.getElementById("arScene").style.display = "block";
-
-  } catch (e) {
-    alert("Camera permission is required for AR");
-  }
-});
-</script>
-
 
   <style>
     html, body {
@@ -49,56 +33,80 @@ document.getElementById("startAR").addEventListener("click", async () => {
       height: 100vh !important;
       object-fit: cover;
     }
+
+    /* simple start button */
+    #startAR {
+      position: absolute;
+      z-index: 9999;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      padding: 12px 20px;
+      font-size: 18px;
+      border-radius: 8px;
+      border: none;
+      background: rgba(0, 150, 255, 0.9);
+      color: white;
+    }
   </style>
 </head>
 
 <body>
- <a-scene
-  id="arScene"
-  style="display: none;"
-  embedded
-  vr-mode-ui="enabled: false"
-  xr-mode-ui="enabled: false"
-  device-orientation-permission-ui="enabled: false"
-  renderer="precision: mediump; antialias: true;"
-  arjs="sourceType: webcam; debugUIEnabled: false;"
->
 
+  <!-- Start button the script references -->
+  <button id="startAR">Start AR</button>
 
-
-
+  <a-scene
+    id="arScene"
+    style="display: none;"
+    embedded
+    vr-mode-ui="enabled: false"
+    xr-mode-ui="enabled: false"
+    device-orientation-permission-ui="enabled: false"
+    renderer="precision: mediump; antialias: true;"
+    arjs="sourceType: webcam; debugUIEnabled: false;"
+  >
     <a-marker preset="hiro">
+      <!-- Arrow Wrapper (rotation-ready) -->
+      <a-entity id="navArrow" position="0 0 0">
+        <!-- Arrow Shaft -->
+        <a-cylinder
+          position="0 0.4 0"
+          radius="0.05"
+          height="0.6"
+          color="#00ff00">
+        </a-cylinder>
 
-  <!-- Arrow Wrapper (rotation-ready) -->
-  <a-entity id="navArrow" position="0 0 0">
+        <!-- Arrow Head -->
+        <a-cone
+          position="0 0.85 0"
+          radius-bottom="0.15"
+          radius-top="0"
+          height="0.3"
+          color="#00ff00">
+        </a-cone>
+      </a-entity>
+    </a-marker>
 
-    <!-- Arrow Shaft -->
-    <a-cylinder
-      position="0 0.4 0"
-      radius="0.05"
-      height="0.6"
-      color="#00ff00">
-    </a-cylinder>
-
-    <!-- Arrow Head -->
-    <a-cone
-      position="0 0.85 0"
-      radius-bottom="0.15"
-      radius-top="0"
-      height="0.3"
-      color="#00ff00">
-    </a-cone>
-
-  </a-entity>
-
-</a-marker>
-
-
+    <!-- Camera entity -->
     <a-entity camera></a-entity>
   </a-scene>
+
+  <script>
+    // Run after DOM is ready and avoid calling getUserMedia directly.
+    document.addEventListener('DOMContentLoaded', function () {
+      const startBtn = document.getElementById('startAR');
+      const arScene = document.getElementById('arScene');
+
+      startBtn.addEventListener('click', function () {
+        // Hide the start button and show the AR scene.
+        startBtn.style.display = 'none';
+        arScene.style.display = 'block';
+
+        // AR.js will request the camera because of a user gesture (the click).
+        // If you still see camera open/close behaviour, check the console for errors.
+      });
+    });
+  </script>
 </body>
 </html>
-
-
-
-
